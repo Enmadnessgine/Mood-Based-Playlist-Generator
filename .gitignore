@@ -1,0 +1,50 @@
+# === Django ===
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# === Environment variables ===
+.env
+.env.*
+!.env.example
+
+# === Virtual environment ===
+venv/
+env/
+ENV/
+.venv/
+
+# === Django settings ===
+local_settings.py
+
+# === Static files ===
+staticfiles/
+static/
+
+# === Migrations (опційно, якщо не хочеш комітити) ===
+# */migrations/
+# !*/migrations/__init__.py
+
+# === IDE / Editors ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Tests / coverage ===
+.coverage
+htmlcov/
+.pytest_cache/
+
+# === Build / packaging ===
+build/
+dist/
+*.egg-info/
