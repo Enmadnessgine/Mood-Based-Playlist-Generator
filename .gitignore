@@ -18,7 +18,7 @@ venv/
 env/
 ENV/
 .venv/
-.rtf
+*.rtf
 
 # === Django settings ===
 local_settings.py
