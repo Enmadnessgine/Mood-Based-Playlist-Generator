@@ -130,3 +130,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+SPOTIFY_TOKEN_ENCRYPTION_KEY = os.getenv("SPOTIFY_TOKEN_ENCRYPTION_KEY")
+
+if not SPOTIFY_TOKEN_ENCRYPTION_KEY:
+    raise RuntimeError("SPOTIFY_TOKEN_ENCRYPTION_KEY is not set")
