@@ -25,9 +25,14 @@ def spotify_login(request):
     scopes = (
         "user-read-email "
         "user-read-private "
+        "user-read-recently-played "
+        "user-top-read "
+        "user-library-read "
+        "playlist-read-private "
         "playlist-modify-public "
         "playlist-modify-private "
-        "user-read-recently-played"
+        "user-read-currently-playing "
+        "user-read-playback-state"
     )
 
     encoded_scopes = urllib.parse.quote(scopes, safe='')
@@ -93,7 +98,6 @@ def spotify_callback(request):
     return redirect("/dashboard/")
 
 
-
 def refresh_spotify_token(refresh_token):
     url = "https://accounts.spotify.com/api/token"
 
@@ -122,6 +126,7 @@ def get_user_profile(access_token):
     response = requests.get("https://api.spotify.com/v1/me", headers=headers)
     return response.json()
 
+
 def save_spotify_token(user, token_data):
     expires_in = token_data["expires_in"]
 
@@ -135,3 +140,35 @@ def save_spotify_token(user, token_data):
             "expires_at": expires_at,
         }
     )
+
+def get_valid_spotify_token(user: User) -> str:
+    token = user.spotify_token
+
+    if token.is_expired():
+        new_access_token = refresh_spotify_token(token.refresh_token)
+
+        if not new_access_token:
+            raise Exception("Failed to refresh Spotify token")
+
+        token.access_token = new_access_token
+        token.expires_at = timezone.now() + timedelta(seconds=3600)
+        token.save(update_fields=["access_token", "expires_at"])
+
+    return token.access_token
+
+
+def spotify_get(user: User, url: str, params=None):
+    access_token = get_valid_spotify_token(user)
+
+    response = requests.get(
+        url,
+        headers={
+            "Authorization": f"Bearer {access_token}"
+        },
+        params=params
+    )
+
+    if response.status_code == 401:
+        raise Exception("Spotify Unauthorized")
+
+    return response.json()

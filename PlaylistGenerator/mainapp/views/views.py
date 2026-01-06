@@ -1,6 +1,36 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+from PlaylistGenerator.mainapp.services import features
+from ..models import SpotifyToken
+from .spotify_auth import spotify_get
+from mainapp.services.features import (get_user_top_tracks, get_audio_features, calculate_user_taste)
 
 
 def index(request):
     return HttpResponse("Hello, world.")
+
+
+@login_required
+def dashboard(request):
+    user = request.user
+
+    profile = spotify_get(
+        user,
+        "https://api.spotify.com/v1/me"
+    )
+
+    recently_played = spotify_get(
+        user,
+        "https://api.spotify.com/v1/me/player/recently-played",
+        params={"limit": 10}
+    )["items"]
+
+    top_tracks = get_user_top_tracks(user)
+    track_ids = [t.get("id") for t in top_tracks if t.get("id")]
+    features = get_audio_features(user, track_ids)
+    taste = calculate_user_taste(features) if features else {}
+    return render(request, "dashboard.html", {"taste": taste, "profile": profile, "recently_played": recently_played})
+

@@ -1,0 +1,35 @@
+<h2>{{ profile.display_name }}</h2>
+<p>{{ profile.email }}</p>
+<p>Account: {{ profile.product }}</p>
+
+{% if profile.images %}
+<img src="{{ profile.images.0.url }}" width="120">
+{% endif %}
+
+<h3>Recently played</h3>
+
+<ul>
+{% for item in recently_played %}
+    <li>
+        {{ item.track.name }} —
+        {{ item.track.artists.0.name }}
+    </li>
+{% endfor %}
+</ul>
+
+<h3>Your top tracks</h3>
+
+<ol>
+{% for track in top_tracks %}
+    <li>{{ track.name }} — {{ track.artists.0.name }}</li>
+{% endfor %}
+</ol>
+
+<h3>Your music taste</h3>
+
+<ol>
+{% for t in  taste %}
+    <li>{{ t.name }} — {{ t.artists.0.name }}</li>
+{% endfor %}
+</ol>
+

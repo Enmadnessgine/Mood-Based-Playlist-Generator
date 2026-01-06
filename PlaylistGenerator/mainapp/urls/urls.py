@@ -1,6 +1,7 @@
 from django.urls import path
-from mainapp.views import views
+from mainapp.views.views import dashboard, index
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", index, name="index"),
+    path("dashboard/", dashboard, name="dashboard"),
 ]
