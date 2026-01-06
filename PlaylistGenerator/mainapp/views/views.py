@@ -3,10 +3,9 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from PlaylistGenerator.mainapp.services import features
 from ..models import SpotifyToken
-from .spotify_auth import spotify_get
-from mainapp.services.features import (get_user_top_tracks, get_audio_features, calculate_user_taste)
+from ..services.spotify_api import spotify_get
+from ..services.features import (get_user_top_tracks, get_audio_features, calculate_user_taste)
 
 
 def index(request):

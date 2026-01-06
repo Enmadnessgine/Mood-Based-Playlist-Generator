@@ -1,4 +1,4 @@
-from mainapp.views.spotify_auth import spotify_get
+from ..services.spotify_api import spotify_get
 
 
 def get_user_top_tracks(user, limit=50):
