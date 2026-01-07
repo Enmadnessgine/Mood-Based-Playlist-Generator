@@ -25,11 +25,18 @@
 {% endfor %}
 </ol>
 
-<h3>Your music taste</h3>
 
-<ol>
-{% for t in  taste %}
-    <li>{{ t.name }} — {{ t.artists.0.name }}</li>
-{% endfor %}
-</ol>
+<h2>{{ profile.display_name }}</h2>
+<p>{{ profile.email }}</p>
+
+<h3>Your taste</h3>
+{% if taste %}
+  <ul>
+    {% for k, v in taste.items %}
+      <li>{{ k }}: {{ v|floatformat:2 }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Not enough data yet 🎧</p>
+{% endif %}
 

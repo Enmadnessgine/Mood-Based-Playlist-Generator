@@ -91,9 +91,10 @@ def spotify_callback(request):
             "first_name": display_name or "",
         }
     )
-
+# 
     login(request, user)
 
     save_spotify_token(user, token_info)
-
+    print("STATUS:", response.status_code)
+    print("TEXT:", response.text)
     return redirect("/dashboard/")

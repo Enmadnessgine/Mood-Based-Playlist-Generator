@@ -72,18 +72,29 @@ def get_valid_spotify_token(user: User) -> str:
     return token.access_token
 
 
-def spotify_get(user: User, url: str, params=None):
-    access_token = get_valid_spotify_token(user)
+def spotify_get(user, url, params=None):
+    token = get_valid_spotify_token(user)
 
     response = requests.get(
         url,
         headers={
-            "Authorization": f"Bearer {access_token}"
+            "Authorization": f"Bearer {token}",
         },
-        params=params
+        params=params,
     )
+    
+    print("URL:", url)
+    print("PARAMS:", params)
 
-    if response.status_code == 401:
-        raise Exception("Spotify Unauthorized")
+    if response.status_code != 200:
+        print("SPOTIFY ERROR:", response.status_code, response.text)
+        return {}
 
-    return response.json()
+    try:
+        return response.json()
+    except ValueError:
+        print("INVALID JSON:", response.text)
+        return {}
+
+
+

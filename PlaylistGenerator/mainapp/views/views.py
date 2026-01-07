@@ -29,7 +29,13 @@ def dashboard(request):
 
     top_tracks = get_user_top_tracks(user)
     track_ids = [t.get("id") for t in top_tracks if t.get("id")]
-    features = get_audio_features(user, track_ids)
-    taste = calculate_user_taste(features) if features else {}
-    return render(request, "dashboard.html", {"taste": taste, "profile": profile, "recently_played": recently_played})
+    features = get_audio_features(user, track_ids, profile)
+    taste = calculate_user_taste(top_tracks)
+
+    print("PROFILE:", profile.keys())
+    print("TOP TRACKS:", len(top_tracks))
+    print("FEATURES:", len(features))
+    print("TASTE:", taste)
+    
+    return render(request, "dashboard.html", {"taste": taste, "profile": profile, "recently_played": recently_played, "top_tracks": top_tracks})
 
